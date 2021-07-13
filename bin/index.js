@@ -5,6 +5,7 @@ const yargs = require("yargs");
 const fetch = require("node-fetch");
 const fs = require("fs");
 const path = require("path");
+const { callbackify } = require("util");
 
 //create parameter to take input path from user
 const options = yargs
@@ -12,7 +13,19 @@ const options = yargs
  .option("i", { alias: "input", describe: "The input file to search", type: "string", })
  .argv;
 
- //resolve path and create variable for database
+//declare a function that greets the user and accepts a callback
+var greeting = (callback) => {
+    console.log('\nHello! Thank you for using my Pokemon type getter console application!')
+    setTimeout((callback) => {
+        console.log('Please wait a moment while I grab the data from the file you supplied.\nIf you did not supply a file path, then I will just use my own test file.');
+        setTimeout((callback) => {
+            console.log('\n\tThank you so much!\n\tPlease hold...\n')
+            callback();
+        }, 1500, callback);
+    }, 2000, callback);
+}
+
+//resolve path and create variable for database
 let pokeListFile;
 if (Boolean(options.input) !== false) {
     pokeListFile = path.resolve(__dirname, `${options.input}`);
@@ -32,7 +45,7 @@ let readAndFormat = new Promise((resolve,reject) => {
             return;
         } else {
             //split the contents of the file read into each line into an array.
-            pokeList = pokeList.split('\n')
+            pokeList = pokeList.split('\n');
             //acquire the data from the databas asynchronously
             fetch(pokeData)
                 .then((result) => {
@@ -53,6 +66,8 @@ let readAndFormat = new Promise((resolve,reject) => {
                     async function getFetch() {
                         //check through all the items needing to be compared to the database
                         for (let i=0;i < pokeList.length;i++) {
+                            //set value to all lowercase for compatability
+                            pokeList[i] = pokeList[i].toLowerCase();
                             //set boolean variable to signify whether a match was found
                             doesContain = false;
                             //check through each pokemon in the database
@@ -102,12 +117,17 @@ let readAndFormat = new Promise((resolve,reject) => {
                 });
         };
     });
- })
- //execute promise, then display the results
- readAndFormat.then((result) => {
-    console.log()
-    for (let i=0;i < result.length;i++) {
-        console.log(result[i]);
-    };
-    console.log();
-  });
+});
+//display greeting
+greeting(function() {
+    //execute promise, then display the results
+    readAndFormat.then((result) => {
+        console.log()
+        for (let i=0;i < result.length;i++) {
+            console.log(result[i]);
+        };
+        console.log(`\n\tGoodbye!\n`);
+    });
+    return;
+});
+ 
