@@ -1,0 +1,11 @@
+{
+  "name": "ussf-js-async-checkpoint",
+  "version": "1.0.0",
+  "description": "async checkpoint project for pokemon API",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Nicholas Raynes",
+  "license": "ISC"
+}
