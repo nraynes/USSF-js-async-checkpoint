@@ -2,10 +2,19 @@
   "name": "ussf-js-async-checkpoint",
   "version": "1.0.0",
   "description": "async checkpoint project for pokemon API",
-  "main": "index.js",
+  "main": "bin/index.js",
   "scripts": {
     "test": "test"
   },
   "author": "Nicholas Raynes",
-  "license": "ISC"
+  "license": "ISC",
+  "bin": {
+    "getPokeTypes": "./bin/index.js"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "node-fetch": "^2.6.1",
+    "path": "^0.12.7",
+    "yargs": "^13.2.4"
+  }
 }
